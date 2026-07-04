@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+
+  api-gateway:
+    build: 
+      context: .
+      dockerfile: src/api-gateway/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - METADATA_SERVICE_URL=http://metadata-service:3001
+      - STORAGE_NODES=http://storage-service-1:3002,http://storage-service-2:3003,http://storage-service-3:3004
+    depends_on:
+      - metadata-service
+      - storage-service-1
+      - storage-service-2
+      - storage-service-3
+
+  metadata-service:
+    build:
+      context: .
+      dockerfile: src/metadata-service/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/dfs-metadata
+    depends_on:
+      - mongodb
+
+  storage-service-1:
+    build:
+      context: .
+      dockerfile: src/storage-service/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - STORAGE_PATH=/data
+      - PORT=3002
+    volumes:
+      - storage-data-1:/data
+
+  storage-service-2:
+    build:
+      context: .
+      dockerfile: src/storage-service/Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+      - STORAGE_PATH=/data
+      - PORT=3003
+    volumes:
+      - storage-data-2:/data
+
+  storage-service-3:
+    build:
+      context: .
+      dockerfile: src/storage-service/Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=development
+      - STORAGE_PATH=/data
+      - PORT=3004
+    volumes:
+      - storage-data-3:/data
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3005:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  storage-data-1:
+  storage-data-2:
+  storage-data-3:
+  mongodb-data: 
+  prometheus-data:
+  grafana-data: 

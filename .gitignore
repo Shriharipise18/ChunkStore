@@ -1,0 +1,40 @@
+# Logs
+logs/
+*.log
+
+# Build directories
+build/
+dist/
+out/
+
+# Dependencies
+node_modules/
+vendor/
+lib/
+
+# Environment variables and configs with sensitive data
+.env
+.env.local
+config/secrets.yaml
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Storage data (if applicable for your distributed storage system)
+data/
+storage/
+
+# Cache
+.cache/

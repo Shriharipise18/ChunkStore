@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'api-gateway'
+    static_configs:
+      - targets: ['api-gateway:3000']
+
+  - job_name: 'metadata-service'
+    static_configs:
+      - targets: ['metadata-service:3001']
+
+  - job_name: 'storage-service-1'
+    static_configs:
+      - targets: ['storage-service-1:3002']
+
+  - job_name: 'storage-service-2'
+    static_configs:
+      - targets: ['storage-service-2:3003']
+
+  - job_name: 'storage-service-3'
+    static_configs:
+      - targets: ['storage-service-3:3004'] 
