@@ -154,7 +154,7 @@ npm run start
 npm run start:metadata
 
 # Start Storage Service (Port 3002)
-npm run start:storage
+npm run start:storage.
 
 # Start React Dev Server (Port 3000 default mapping)
 npm run start:frontend
