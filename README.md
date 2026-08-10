@@ -1,4 +1,4 @@
-# Distributed File System (ShardVault)
+# Distributed File System (ChunkStore)
 
 A highly scalable distributed file system with metadata management, file chunking, round-robin storage balancing, and active system monitoring — inspired by the architecture of GFS (Google File System) and HDFS.
 
